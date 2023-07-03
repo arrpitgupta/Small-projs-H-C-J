@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Form with Basic Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    small {
+      display: block;
+      margin-top: 5px;
+      color: #777;
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <h1>Form with Basic Validation</h1>
+
+  <form id="myForm" onsubmit="validateForm(event)">
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" required>
+    </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" required>
+    </div>
+
+    <div>
+      <label for="phone">Phone Number:</label>
+      <input type="tel" id="phone" pattern="[0-9]{10}" required>
+      <small>Format: 1234567890</small>
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" required>
+    </div>
+
+    <div>
+      <label for="age">Age:</label>
+      <input type="number" id="age" min="18" max="99" required>
+    </div>
+
+    <div>
+      <label for="gender">Gender:</label>
+      <select id="gender" required>
+        <option value="">Select</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div>
+      <label for="date">Date:</label>
+      <input type="date" id="date" required>
+    </div>
+
+    <div>
+      <label for="color">Favorite Color:</label>
+      <input type="color" id="color" required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <script>
+    function validateForm(event) {
+      event.preventDefault();
+      
+      // Reset any previous error messages
+      const errorElements = document.getElementsByClassName('error');
+      for (let i = 0; i < errorElements.length; i++) {
+        errorElements[i].style.display = 'none';
+      }
+
+      // Get form values
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const phone = document.getElementById('phone').value;
+      const password = document.getElementById('password').value;
+      const age = document.getElementById('age').value;
+      const gender = document.getElementById('gender').value;
+      const date = document.getElementById('date').value;
+      const color = document.getElementById('color').value;
+
+      // Perform validation
+      if (name === '') {
+        displayError('name', 'Name is required.');
+      }
+
+      if (!validateEmail(email)) {
+        displayError('email', 'Invalid email format.');
+      }
+
+      if (!validatePhoneNumber(phone)) {
+        displayError('phone', 'Invalid phone number format.');
+      }
+
+      if (password.length < 8) {
+        displayError('password', 'Password must be at least 8 characters long.');
+      }
+
+      if (age < 18 || age > 99) {
+        displayError('age', 'Age must be between 18 and 99.');
+      }
+
+      if (gender === '') {
+        displayError('gender', 'Gender is required.');
+      }
+
+      // If there are no errors, submit the form
+      if (document.getElementsByClassName('error').length === 0) {
+        document.getElementById('myForm').submit();
+      }
+    }
+
+    function displayError(fieldId, errorMessage) {
+      const errorElement = document.createElement('span');
+      errorElement.className = 'error';
+      errorElement.innerHTML = errorMessage;
+      const field = document.getElementById(fieldId);
+      field.parentNode.insertBefore(errorElement, field.nextSibling);
+    }
+
+    function validateEmail(email) {
+      const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      return emailRegex.test(email);
+    }
+
+    function validatePhoneNumber(phone) {
+      const phoneRegex = /^\d{10}$/;
+      return phoneRegex.test(phone);
+    }
+  </script>
+</body>
+</html>
